@@ -1,13 +1,16 @@
 import React, { Component } from "react";
+import { actionSignUp } from "../store/action/authAction";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
-export default class SignUp extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
-      lastName: "",
-      firstName: ""
+      firstName: "",
+      lastName: ""
     };
   }
   handleChange = event => {
@@ -17,9 +20,13 @@ export default class SignUp extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
+    this.props.SignUp(this.state);
   };
   render() {
+    let {auth}= this.props
+    if (auth.uid) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -48,3 +55,16 @@ export default class SignUp extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    error: state.authReducer.error,
+    auth: state.firebaseReducer.auth
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    SignUp: reg => dispatch(actionSignUp(reg))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

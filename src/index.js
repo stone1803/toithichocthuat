@@ -5,7 +5,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 // config redux - redux-thunk
 import { createStore, applyMiddleware, compose } from "redux";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import rootReducer from "./components/store/reducers/rootReducer";
 import thunk from "redux-thunk";
 // config firebase
@@ -15,7 +15,21 @@ import {
   getFirestore,
   reduxFirestore
 } from "redux-firestore";
-import { getFirebase, ReactReduxFirebaseProvider } from "react-redux-firebase";
+import {
+  getFirebase,
+  ReactReduxFirebaseProvider,
+  isLoaded
+} from "react-redux-firebase";
+function AuthIsLoaded({ children }) {
+  const auth = useSelector(state => state.firebaseReducer.auth);
+  if (!isLoaded(auth))
+    return (
+      <div className="container text-center">
+        <h1>VẠN PHẬT TÙY TÂM</h1>
+      </div>
+    );
+  return children;
+}
 
 const middleWare = [thunk.withExtraArgument({ getFirestore, getFirebase })];
 const store = createStore(
@@ -24,7 +38,7 @@ const store = createStore(
 );
 // cho store o tren moi chay vi cap store truoc sau do moi config firebase get database
 const rrfConfig = {
-  userProfile: "users",
+  userProfile: "user",
   useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
   //enableClaims: true // Get custom claims along with the profile
 };
@@ -38,7 +52,9 @@ const rrfProps = {
 ReactDOM.render(
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
-      <App />
+      <AuthIsLoaded>
+        <App />
+      </AuthIsLoaded>
     </ReactReduxFirebaseProvider>
   </Provider>,
   document.getElementById("root")

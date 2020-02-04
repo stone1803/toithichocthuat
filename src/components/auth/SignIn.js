@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { actionsignIn } from "../store/action/authAction";
+import { Redirect } from "react-router-dom";
+import Swal from "sweetalert2";
+
 class SignIn extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +24,11 @@ class SignIn extends Component {
   };
   render() {
     console.log(this.props.auth);
-    let { error } = this.props;
+    let { error,auth } = this.props;
+    if(auth.uid){
+
+    return    <Redirect to="/"/>
+    }
     console.log(this.props.error);
     return (
       <div className="container">
@@ -52,7 +59,9 @@ const mapDispatchToProps = dispatch => {
 };
 const mapStateToProps = state => {
   return {
-    error: state.authReducer.error
+    error: state.authReducer.error,
+    auth: state.firebaseReducer.auth
+
   };
 };
 

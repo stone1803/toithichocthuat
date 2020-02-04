@@ -6,13 +6,16 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
+import { Redirect } from "react-router-dom";
+import Swal from "sweetalert2";
 
 class CreateTips extends Component {
   constructor(props) {
     super(props);
     this.state = {
       title: "",
-      content: EditorState.createEmpty()
+      des: "",
+      content: ""
     };
   }
   handleChange = event => {
@@ -22,8 +25,13 @@ class CreateTips extends Component {
   };
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
     this.props.actionTip(this.state);
+    Swal.fire({
+      icon: "error",
+      title: "Thêm mới thành công",
+      text: "Cảm ơn bạn chia sẽ bài viết"
+    });
+    return <Redirect to="/" />;
   };
   onContentStateChange = content => {
     this.setState({
@@ -38,7 +46,15 @@ class CreateTips extends Component {
 
   render() {
     let { content } = this.state;
-
+    let { auth } = this.props;
+    if (!auth.uid) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Vui lòng đăng ký thành viên để post bài"
+      });
+      return <Redirect to="/SignUp" />;
+    }
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white">
@@ -48,8 +64,11 @@ class CreateTips extends Component {
             <input type="text" id="title" onChange={this.handleChange} />
           </div>
           <div className="input-field">
-            <label htmlFor="content">Content</label>
-            <textarea type="text" id="content" onChange={this.handleChange} />
+            <label htmlFor="des">Content</label>
+            <p>phần mô tả ngắn TIps</p>
+            <textarea type="text" id="des" onChange={this.handleChange} />
+            <p>Nội dung chính bài Tips</p>
+
             <CKEditor
               typ
               id="content"
@@ -95,13 +114,13 @@ class CreateTips extends Component {
             /> */}
           {/* </div> */}
           <div>
-            <Editor
-              initialEditorState={content}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              onEditorStateChange={this.onEditorStateChange}
-            />
+            {/* <Editor
+                initialEditorState={content}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={this.onEditorStateChange}
+              /> */}
           </div>
           <div className="input-field">
             <button className="btn pink">ADD </button>
@@ -111,9 +130,16 @@ class CreateTips extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  console.log(state);
+  return {
+    auth: state.firebaseReducer.auth
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     actionTip: data => dispatch(actionTip(data))
   };
 };
-export default connect(null, mapDispatchToProps)(CreateTips);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTips);

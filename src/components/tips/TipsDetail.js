@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
+import ReactHtmlParser from "react-html-parser";
 
 const TipsDetail = props => {
   console.log(props);
@@ -12,10 +13,10 @@ const TipsDetail = props => {
         <div className="card z-depth-0">
           <div className="card-content">
             <span className="card-title">{tip.title}</span>
-            <p>{tip.content}</p>
+            <div className="left-align"> {ReactHtmlParser(tip.content)}</div>
           </div>
           <div className="card-action grey lighten-4 grey-text">
-            <div>Phuc Le</div>
+            <div>Tác Giả : {tip.authorFullName}</div>
           </div>
         </div>
       </div>

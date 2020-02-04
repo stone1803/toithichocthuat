@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import { actionsignOut } from "../store/action/authAction";
 class SignedLink extends Component {
   render() {
-    let { LogOut } = this.props;
+    let { LogOut,profile } = this.props;
+    console.log(this.props)
     return (
       <ul className="right">
         <li>
@@ -17,7 +18,7 @@ class SignedLink extends Component {
         </li>
         <li>
           <NavLink to="/" className="btn btn-floating pink lighten-1">
-            MM
+            {profile.nickname}
           </NavLink>
         </li>
       </ul>
