@@ -4,6 +4,11 @@ import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
 import ReactHtmlParser from "react-html-parser";
 
+import {
+  FacebookShareButton,
+  FacebookShareCount,
+  FacebookIcon
+} from "react-share";
 const TipsDetail = props => {
   console.log(props);
   const { tip } = props;
@@ -17,6 +22,13 @@ const TipsDetail = props => {
           </div>
           <div className="card-action grey lighten-4 grey-text">
             <div>Tác Giả : {tip.authorFullName}</div>
+            <div>
+              <FacebookShareCount url="">
+                {shareCount => (
+                  <span className="myShareCountWrapper">{shareCount}</span>
+                )}
+              </FacebookShareCount>
+            </div>
           </div>
         </div>
       </div>

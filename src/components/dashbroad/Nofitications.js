@@ -7,7 +7,6 @@ export default class Nofitications extends Component {
         <div className="card">
           <h5>Thông Báo </h5>
           <p>Chuẩn bị ra mắt lun phiên bản APP</p>
-     
         </div>
         <h5 className="text-center text-light">Say ! Hello</h5>
         <img src="//graph.facebook.com/100000838467269/picture?type=large"></img>
@@ -30,18 +29,10 @@ export default class Nofitications extends Component {
         </a>
         <br />
         <div
-          className="fb-share-button"
-          data-href="https://huyenhoctip.web.app"
-          data-layout="button_count"
-          data-size="large"
+
         >
-          <a
-            target="_blank"
-            href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fhuyenhoctip.web.app%2F&amp;src=sdkpreparse"
-            className="fb-xfbml-parse-ignore"
-          >
-            Chia sẻ
-          </a>
+            
+
         </div>
       </div>
     );
